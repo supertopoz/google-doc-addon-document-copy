@@ -38,7 +38,6 @@ App TAs use for producing the Reminder
 - [Progress check branch code](https://docs.google.com/document/d/1yiWbS6Gxf2UHTcmH8qfDuXmWC9oF2-S3imuqKetvayE/edit)
 - [Optimizing Branch](https://docs.google.com/document/d/1-C8Rx0SPmhe0v5pVOcULKqVltQEDuZ3adDIR0zYlVkg/edit)
 - Associated Documents: 
-- [Master data folder](https://drive.google.com/drive/u/0/folders/0B5miykSsL-gYdlpqS0k4UWwzTW8) - Contains tag reference data and progress certificate data.
 
 
 ### Prerequisites
@@ -81,6 +80,6 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## License
 
-This project strictly belongs to ILA Vietnam
+This application strictly belongs to ILA Vietnam - No licences are granted
 
 
