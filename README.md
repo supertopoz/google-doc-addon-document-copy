@@ -1,6 +1,8 @@
 # google-doc-addon-document-copy AKA Reminder-App
 App TAs use for producing the Reminder
 
+![capture](https://user-images.githubusercontent.com/13721960/35959804-6e32f1e6-0cea-11e8-8c8c-db61a4697350.PNG)
+
 
 # Purpose
 * To provide an add-on to Google docs for TAs to complete their reminders. Two tool run once the reminder documents are created. 
