@@ -1,7 +1,7 @@
 # google-doc-addon-document-copy AKA Reminder-App
 App TAs use for producing the Reminder
 
-![capture](https://user-images.githubusercontent.com/13721960/35959804-6e32f1e6-0cea-11e8-8c8c-db61a4697350.PNG)
+![capture](https://user-images.githubusercontent.com/13721960/35959864-bd0ec894-0cea-11e8-8957-8b50f3da03c2.PNG)
 
 
 # Purpose
