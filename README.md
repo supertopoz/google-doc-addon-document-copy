@@ -5,8 +5,9 @@ App TAs use for producing the Reminder
 
 
 # Purpose
-* To provide an add-on to Google docs for TAs to complete their reminders. Two tool run once the reminder documents are created. 
+* To provide an add-on to Google docs for TAs to complete their reminders. Two microservices run once the reminder documents are created. 
 * The tool is a Google document addon which picks up data from several sources and copies that data into a new document (AKA Reminder). 
+* The data consists of images, text and tables etc. 
 
 
 # Life cycle
