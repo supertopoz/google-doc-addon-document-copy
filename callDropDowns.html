@@ -1,0 +1,212 @@
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+
+
+<script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+<script>
+  // Initialize Firebase
+var bookData = "";
+var programmModule;
+var documentId;  
+var fbLevelData = {};
+var projectData = {};
+var projectDocId = '';
+  
+  var config = {
+    apiKey: "AIzaSyA4mEU9h6SyBASwf-3e1Pi2h-o4psD2rnA",
+    authDomain: "reminder-content.firebaseapp.com",
+    databaseURL: "https://reminder-content.firebaseio.com",
+    projectId: "reminder-content",
+    storageBucket: "reminder-content.appspot.com",
+    messagingSenderId: "128564306591"
+  };
+  firebase.initializeApp(config);
+  
+const getFbData = (level) => {
+  firebase.database().ref('/'+ level +'/').once('value').then(function(data) {
+  let mainData = data
+  firebase.database().ref('/'+ level[0] +'/').once('value').then(function(data) {
+    console.log(...data.val().data)
+    mainData.val().data.push(...data.val().data);
+    console.log(mainData.val())
+    var arr = [];
+    projectDocId = data.val().data[0].documentid;
+    console.log(projectDocId);
+    
+    arr.push(...data.val().data)
+    arr.push(...mainData.val().data)
+    $('.spin-loader').hide('fast');
+    $('#whole-app').show('fast');
+    levelData(arr) 
+  });
+
+  });
+
+  
+}
+
+const getProjectData = (level) => {
+  firebase.database().ref('/'+ level[0] +'/').once('value').then(function(data) {
+    $('.spin-loader').hide('fast');
+    $('#whole-app').show('fast');
+    levelData(data.val().data) 
+  });
+}
+
+function failure(e){
+console.log(e)
+}
+
+var getAllLevels = function(){
+  $('#grammarbox').empty();
+  $('.message').show()
+  $('#loading').empty()
+  $('#loading').hide();
+  var div = $('<div>This document needs to be named with a valid class code. Check the document name, and then re-start this app. Below is a list of currently supported levels</div>');
+  $('#warning').append(div);
+  availableLevels.forEach(function(x){
+  $('.tableScroll').append("<div class='ui label'>"+x+"</div>");
+  })
+}
+
+const parseProgramAndModuleFromClassCode = (classCode) => {
+     var dash = classCode.indexOf("-")   
+     var levelModule ="";
+     var programme = classCode.substr(dash-1, 3).replace("-","").replace("L","");  
+     (programme.indexOf("K") >=0)? levelModule = classCode.substr(dash+1, 3).replace("-","").replace("L","") : levelModule = classCode.substr(dash+2, 1); 
+     return programme + levelModule;
+   }
+
+const parseTitleLevel = (documentTitle) => {      
+   var space = documentTitle.lastIndexOf("-");
+   var classCode = documentTitle.substring(0,space);                
+   return parseProgramAndModuleFromClassCode(classCode)
+}
+   
+let successful = function(documentTitle) { 
+    
+  //  let data = fbLevelData[parseTitleLevel(documentTitle)]
+    let data = getFbData(parseTitleLevel(documentTitle)) 
+}
+  
+google.script.run.withSuccessHandler(successful).withFailureHandler(failure).getDocumentTitle();
+//---------------------Tests successful -----------------------------------------------
+
+const levelData = (data) => {
+  bookData = data;
+  $("#loading").hide();
+  var units = new Set()
+  data.forEach(item => {
+  units.add(`Unit ${item.unit}`)        
+  })   
+  documentId = data[data.length -1].documentid
+  units.forEach((item, index) => {
+  let name = item;
+  if(name.indexOf('projects') >=0 || name.indexOf('Revision') >= 0  || name.indexOf('Welcome') >= 0){
+    name = name.replace('Unit ', '').replace('p', 'P');
+  }  
+    const value = item.replace('Unit ',"unit")
+  if(name.indexOf('Welcome') >= 0){
+    $('#unit').prepend('<a class="ui mini teal unit label" id="'+ value +'">' + name + '</a>');
+  } else {
+  $('#unit').append('<a class="ui mini teal unit label" id="'+ value +'">' + name + '</a>');
+  }
+  })
+
+}
+ 
+  
+$(document).on('click','.unit', function(){
+var unit = $(this).attr('id').replace('unit','');
+console.log(unit);
+addGrammarButtons(unit);
+})
+
+$(document).on('click','.fixedItem', function(){
+  $(this).addClass('loading');
+  var tag = $(this).attr('value')
+  console.log(tag)
+google.script.run.withSuccessHandler(success).withFailureHandler(singleButtonFailed).addFixedContent(tag);
+})
+
+$(document).on('click','#templateBttn', function(){
+   $(this).addClass('loading');
+   var tag = '<<startreview>>'
+google.script.run.withSuccessHandler(success).withFailureHandler(singleButtonFailed).addFixedContent(tag);
+})
+
+const singleButtonFailed = (e) =>{
+  console.log(e)
+}
+
+function addGrammarButtons(unit){
+
+  $('#grammarbox').empty();  
+  bookData.forEach(item => {
+    if(item.unit == unit){
+    $('#grammarbox').append('<div class="ui blue mini button grammarbut" name="'+item.starttag+'">'+ item.objecttype +'</div>') 
+    }
+  })  
+}
+
+$(document).on('click', '.grammarbut', function(){
+   $(this).addClass('loading');
+   var tag = $(this).attr('name');
+   
+   console.log(tag);
+   var project = $(this).attr('class');
+     var e = [tag,documentId];
+   if(tag.indexOf('project') >=0 ){
+     var e = [tag,projectDocId];
+   }
+ 
+   console.log("This is the tag: ", e[0])
+   console.log("This is the docId: ", e[1])
+   if (project.indexOf("project") >=0){
+//   console.log("HARD: ", e)
+   google.script.run.withSuccessHandler(success).withFailureHandler(failed).addFixedContent(tag);
+   } else {
+//  console.log("SOFT: ", e)
+   google.script.run.withSuccessHandler(success).withFailureHandler(failed).add(e);   
+   }
+});
+
+function success(){
+  $('.fixedItem').removeClass('loading');
+  $('.grammarbut').removeClass('loading');
+  $('#templateBttn').removeClass('loading');
+  
+}
+
+function failed(e){
+  console.log(e);
+ $('.grammarbut').removeClass('loading');
+ $('#warning').empty();
+  $('.message').show()
+  var div = $('<div>Make sure the cursor is blinking and no text is selected.</div>');
+ $('#warning').append(div);
+}
+
+$('.message .close').on('click', function() {
+      $(this).closest('.message').hide()
+  })
+  
+var theTitleFailed = function(){
+  return "failed"
+  $('.message').show()
+  $('#loading').empty()
+  $('#loading').hide();
+  var div = $('<div>This document needs to be named with a valid class code. Check the document name, and then re-start this app. Below is a list of currently supported levels</div>');
+  $('#warning').append(div);
+  availableLevels.forEach(function(x){
+ // console.log("working");
+  $('.tableScroll').append("<div>"+x+"</div>");
+  })
+  
+}
+</script>
+
+
+
+
+

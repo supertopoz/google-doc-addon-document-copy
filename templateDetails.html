@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+	<meta content="width=device-width" name="viewport">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/components/segment.min.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/components/input.min.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/components/button.min.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/components/grid.min.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/components/container.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+	<title>JS Bin</title>
+    <style>
+body{
+font-family: 'Roboto Condensed', sans-serif;
+font-size: 12px !important;
+}
+    .delete-button{
+  float:right;
+  cursor:pointer;
+}
+
+#list{
+  height:300px;
+  overflow:auto;
+  overflow-x: hiddenl
+}
+
+input{
+  max-width:80% !important;
+  margin-top: -4px !important;
+  margin-bottom: -16px !important;
+  font-size:12px;
+}
+
+#main-container{
+  width:500px;
+}
+
+.name-label{
+  margin-top:10px !important;
+  font-size: 12px !important;
+  color: grey;
+  
+}
+
+.material-icons{
+  font-size: 17px;
+}
+
+#info-icon{
+  font-size:25px !important;
+  cursor:pointer;
+  color:#2185d0;
+  margin-left: 110px !important;
+}
+#content{
+  margin-top: 5px;
+  margin-right: 20px;
+  font-size:12px;
+}
+
+
+    </style>
+</head>
+<body>
+
+
+  
+       <div class="ui container">
+		<div class="ui segment">
+			<div class="ui grid stackable container centered">
+				<div class="fourteen wide column">
+					<div class="ui mini fluid input">
+						<input id="name" placeholder="Name..">
+					</div>
+				</div>
+				<div class="fourteen wide column">
+					<div class="ui mini fluid input">
+						<input id="phone" placeholder="TA phone (Optional)..." type="text">
+					</div>
+                  
+				</div>
+			</div>
+              <p>No phone number required for Teachers.</p>
+			<div class="ui grid stackable container centered">
+				<div class="fourteen wide column">
+					<div class="mini ui buttons aligned-right" id="save-buttons">
+						<div id="ta" class="ui blue button">
+							TA
+						</div>
+						<div id="teacher" class="ui mini green button">
+							Teacher
+						</div>
+                        <i id="info-icon" class="material-icons">info_outline</i>
+					</div>
+                    <div id="content" hidden>
+                    <p>You need to type the correct teacher name for each of your classes.</p>
+                    <p>If there is a cover teacher for one or two classes, you can edit the teacher name directly on the template.</p>
+                    <p>If there is a permanent teacher change, please update the correct teacher name because it is automatically inserted in the template.</p>
+                    </div>
+				</div>
+			</div>
+            </div>
+            <div class="ui segment">
+            <div class="ui container">             
+                <div id="list"></div>
+            </div>
+            </div>    
+		</div>
+
+
+  <script>
+
+ 
+$(document).ready(function(){
+google.script.run.withSuccessHandler(success).withFailureHandler(failed).getFbData();
+});     
+
+$(document).on('click','.delete-button',function(){
+  var node =$(this).parent().remove();
+  sendData();
+});
+
+function failed(e){
+  console.log(e);
+}
+
+
+var deleteSuccess = function(e){  
+  success(e);
+};
+ 
+ var sendData = function(){
+   var data = [];
+   var obj = {};
+   var htmlData = $('#list')[0].children;
+   var lng = htmlData.length;
+   for (var i = 0; i < lng; i++){
+     var value = {};
+     value = $(htmlData[i]).data('info');
+
+     var dataObj = {};
+     dataObj.key = i + "";
+     dataObj.value = value; 
+     data.push(dataObj);
+   }
+  console.log(data);
+  google.script.run.withSuccessHandler().withFailureHandler().sendData(data);
+};
+
+var success = function(e){
+    $('#list').empty();
+    console.log(typeof e);
+    var data = JSON.parse(e);
+    console.log(data)
+    data.forEach(function(item, index){
+    var result = item.value;
+    console.log(result)
+    var position = "TA";
+    var phone = '<br><i class="material-icons phone">call</i>: '+result.p;
+    if(result.t === '1'){
+      position = "Teacher";
+      phone = "";
+    }  
+    var obj = {};
+    obj.t = result.t;
+    obj.n = result.n;
+    obj.p = result.p; 
+    obj.id = JSON.stringify(Date.now());
+    $('<div class="ui eleven-wide column segment name-label">'+
+	position+': '+result.n+ phone +'<span class="delete-button" id="'+result.id+'"><i class="material-icons" >delete</i></span></div>')
+    .data('info',obj)
+    .prependTo('#list');
+  });
+//  console.log(e)
+return
+};
+
+$(document).on('click','#ta',function(){
+   var now = Date.now();   
+   var position = "TA";   
+   var name = $('#name').val();
+   if(name === '') {
+     alert('Don\'t be silly... Add a name');
+     return;
+   }
+   var obj = {};
+   var phone = $('#phone').val();
+   obj.p = phone;
+   (phone === '')? phone = "" : phone = '<br><i class="material-icons phone">call</i>: ' + phone   
+   obj.t = "2";
+   obj.n = name;
+   obj.id = JSON.stringify(Date.now());
+   $('<div class="ui segment name-label" id="teacher_name_jason_Allshorn_phone_0606070704">'+
+	position+': '+name+ phone+'<span class="delete-button" id="'+now+'">'+
+    '<i class="material-icons">delete</i></span></div>')
+    .data('info',obj)
+    .prependTo('#list')
+    sendData();
+    $('#name').val('')
+    $('#phone').val('')
+})
+
+
+
+
+$(document).on('click','#teacher',function(){
+   var now = Date.now()
+   var position = "Teacher"
+   var name = $('#name').val();    
+   if(name === ''){
+    alert('Hold up! Gonna need a name to go with that.')
+    return
+   }
+   var obj = {}
+   obj.t = "1";
+   obj.n = name;
+   obj.p = "";
+   obj.id = JSON.stringify(Date.now());
+   $('<div class="ui segment name-label">'+ 
+     position+': '+name+'<span class="delete-button" id="'+now+'">'+
+     '<i class="material-icons">delete</i></span></div>')
+     .data('info',obj)
+     .prependTo('#list')    
+   sendData();
+   $('#name').val('')
+   $('#phone').val('')
+})
+
+
+/**** info slider ****/
+
+$('#info-icon').on('mouseover',function(){
+  $('#content').slideDown();
+})
+
+$('#info-icon').on('mouseout',function(){
+  $('#content').slideUp();
+})
+</script>
+</body>
+</html>
+
+
+
+
+
+

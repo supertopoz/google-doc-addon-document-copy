@@ -1,0 +1,78 @@
+<script>
+(function() {
+  "use strict";
+
+
+
+
+  var ENTER_KEY_CODE = 13;
+  var queryInput, resultDiv;
+
+  window.onload = init;
+
+  function pushScroll(){
+  document.getElementById("result").scrollTop = document.getElementById("result").scrollHeight;
+
+  }
+
+
+  function init() {
+    queryInput = document.getElementById("q");
+    resultDiv = document.getElementById("result");
+    queryInput.addEventListener("keydown", queryInputKeyDown);
+  }
+
+  function queryInputKeyDown(event) {
+    if (event.which !== ENTER_KEY_CODE) {
+      return;
+    }
+
+    var value = queryInput.value;
+    queryInput.value = "";
+
+    createQueryNode(value);
+    var responseNode = createResponseNode();
+
+    sendText(value).then(function(response) {
+      var result;
+      try {
+        result = response.result.fulfillment.speech
+      } catch(error) {
+        result = "";
+      }
+      setResponseOnNode(result, responseNode);
+    });
+  }
+
+  function createQueryNode(query) {
+    var node = document.createElement('div');
+    node.className = "you-dialogue";
+    node.innerHTML = query;
+    resultDiv.appendChild(node);
+    pushScroll();
+  }
+
+  function createResponseNode() {
+    var node = document.createElement('div');
+    node.className = "ai-dialogue";
+    node.innerHTML = "...";
+    resultDiv.appendChild(node);
+    pushScroll();
+    return node;
+
+  }
+
+  function setResponseOnNode(response, node) {
+    node.innerHTML = response ? response : "[empty response]";
+    node.setAttribute('data-actual-response', response);
+    var speaking = false;
+    pushScroll();
+  }
+  function sendRequest() {
+  }
+
+})();
+
+</script>
+
+

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/components/input.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/components/segment.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/components/loader.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/components/button.min.css" />
+ 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div>
+        <p id='result'></p>
+    </div>
+    <script type="text/javascript" src="https://apis.google.com/js/api.js?onload=onApiLoad"></script>
+    <p>Here you can:</p>
+    <ul>
+    <li>use a different name in the reminder template</li>
+    <li>add your telephone number</li>
+    </ul>
+    
+    <p>You only need to do this once.  Your information will be saved until such time as you update it.</p>
+    <div class="ui segment">
+    <p>Name (to appear in template)</p>
+      <div class="ui input">
+        <input id="name" placeholder="Loading..." disabled>
+      </div>
+     
+    <br> 
+    <p>Phone number (optional):</p>
+    <div class="ui input">
+    <input id ="phone" placeholder="Loading..." disabled>
+    </div>
+    </div>
+    <button onclick="google.script.host.close()" class="ui mini primary button">Done</button>
+    <script>
+    $(document).ready(function(){
+      getUserDetailsFromFB()
+    
+   })
+
+
+function getUserDetailsFromFB(){
+   google.script.run.withFailureHandler(fail).withSuccessHandler(success).getData();
+}
+
+function success(e){
+  $('#name').prop('disabled', false)
+  $('#phone').prop('disabled', false)
+  console.log(e)
+  if (e === undefined){
+    $('#name').prop('placeholder', 'name...')
+    $('#phone').prop('placeholder', 'phone...')
+  }
+  if (e.name === ''){
+    $('#name').prop('placeholder', 'name...')
+  } else {
+    $('#name').val(e.name)
+  }
+  if (e.phone === ''){
+    $('#phone').prop('placeholder', 'phone...')
+  } else {
+    $('#phone').val(e.phone)
+  }
+}
+
+function fail(e){
+  console.log("Error:" + e)
+  
+}
+
+$('#name').keyup(function(){
+  if($('#name').val() === ''){
+    $('#name').prop('placeholder', 'name...')
+    $('#phone').prop('placeholder', 'phone...')
+  }
+  var name = $('#name').val()
+  var phone = $('#phone').val()
+  var data = {"name":name, "phone":phone}
+  google.script.run.withFailureHandler(fail).setData(data);
+})
+
+$('#phone').keyup(function(){
+  var name = $('#name').val()
+  var phone = $('#phone').val()
+  var data = {"name":name, "phone":phone}
+  google.script.run.withFailureHandler(fail).setData(data);
+})
+    
+    
+    
+    
+    
+    
+    </script>
+    
+
+</body>
+</html>
+
+
+  

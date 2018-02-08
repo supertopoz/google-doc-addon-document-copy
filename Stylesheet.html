@@ -1,0 +1,267 @@
+
+ <style>
+ 
+body {
+  background-color: #f4f4f4;
+}
+
+#note{
+color:blue;
+font-size:10px;
+/*border: 1px solid red !important;*/
+padding: 2px;
+border-radius: 2px;
+background: pink;
+width:100%
+}
+
+.ui.blue.button, .ui.blue.butto {
+  box-shadow: 1px 1px 2px #c6c6c6 !important;
+  border-radius: 0px !important;
+}
+
+.ui.orange.button, .ui.orange.buttons .button {
+  box-shadow: 1px 1px 2px #c6c6c6 !important;
+  border-radius: 0px !important;
+}
+
+.script-application-sidebar-header {
+  background: #4285f4 !important;
+}
+.branding-below {
+  bottom: 56px;
+  top: 0;
+}
+.branding-text {
+  left: 7px;
+  position: relative;
+  top: 3px;
+}
+.col-contain {
+  overflow: hidden;
+}
+.col-one {
+  float: left;
+  width: 50%;
+}
+.logo {
+  vertical-align: middle;
+}
+.radio-spacer {
+  height: 20px;
+}
+.width-100 {
+  width: 100%;
+}
+#link {
+  margin-left: 20px;
+}
+body {
+  /* margin: 0; */
+  font: normal 14px Arial, Verdana, sans-serif;
+}
+#helpList {
+  text-align: left !important;
+}
+#templateBttn {
+  line-height: 0.4 !important;
+  padding-bottom: 3px !important;
+  margin-bottom: -6px !important;
+}
+.grammarbut {
+  margin-bottom: 10px !important;
+  width: 14.5em !important
+}
+.fixedItem {
+  margin-bottom: 10px !important;
+  width: 14.5em !important
+}
+.ui.mini.label, .ui.mini.labels .label {
+  padding-top: 9px !important;
+  margin-left: 2px !important;
+  box-shadow: 1px 1px 1px #c6c6c6;
+  border-radius: 0px !important
+}
+.tableScroll {
+  height: 15em;
+  overflow: auto;
+  overflow-x: hidden;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-button {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-thumb {
+  background: #bfbfbf;
+  border: 0px none #bfbfbf;
+  border-radius: 0px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #bfbfbf;
+}
+::-webkit-scrollbar-thumb:active {
+  background: #bfbfbf;
+}
+::-webkit-scrollbar-track {
+  background: #ffffff;
+  border: 0px groove #bfbfbf;
+  border-radius: 0px;
+}
+::-webkit-scrollbar-track:hover {
+  background: #ffffff;
+}
+::-webkit-scrollbar-track:active {
+  background: #ffffff;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+th.sorted.ascending:after {
+  content: "  \2191";
+}
+th.sorted.descending:after {
+  content: " \2193";
+}
+.links {
+  text-decoration: none;
+  color: #16ab39
+}
+#assistant {
+  cursor: pointer;
+  font-size: 14px;
+  color: white;
+  background-color: black;
+  border: solid black 1px;
+  border-radius: 100%;
+  padding: 5px;
+  margin-right: 15px;
+}
+.half-panel {
+  border: solid 1px gray;
+  min-height: 20px;
+  height: auto;
+  font-family: monospace;
+}
+.hidden {
+  display: none;
+}
+.chatBox {
+  height: 200px;
+  border: 0px;
+  overflow-x: hidden;
+}
+.you-dialogue {
+  clear: both;
+  background-color: rgb(0, 181, 173);
+  color: white;
+  max-width: 13.5em;
+  padding: 5px;
+  border-radius: 2px;
+  font-size: 12px;
+  margin: 2px;
+}
+.ai-dialogue {
+  clear: both;
+  background-color: #2185D0;
+  color: white;
+  border-radius: 2px;
+  max-width: 13.5em;
+  padding: 5px;
+  font-size: 12px;
+  float: right;
+  margin: 2px;
+}
+#result {
+  height: 200px;
+  overflow-y: scroll;
+}
+
+/* -------- Loader ----------- */
+.loader {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.item {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+}
+
+.item-1 {
+  background-color: #2185D0;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  animation: item-1_move 1.8s cubic-bezier(.6,.01,.4,1) infinite;
+}
+
+.item-2 {
+  background-color: #F2711C;
+  top: 0;
+  right: 0;
+  animation: item-2_move 1.8s cubic-bezier(.6,.01,.4,1) infinite;
+}
+
+.item-3 {
+  background-color: #00B5AD;
+  bottom: 0;
+  right: 0;
+  z-index: 1;
+  animation: item-3_move 1.8s cubic-bezier(.6,.01,.4,1) infinite;
+}
+
+.item-4 {
+  background-color: #616161;
+  bottom: 0;
+  left: 0;
+  animation: item-4_move 1.8s cubic-bezier(.6,.01,.4,1) infinite;
+}
+
+@keyframes item-1_move {
+  0%, 100% {transform: translate(0, 0)} 
+  25% {transform: translate(0, 100px)} 
+  50% {transform: translate(100px, 100px)} 
+  75% {transform: translate(100px, 0)} 
+}
+
+@keyframes item-2_move {
+  0%, 100% {transform: translate(0, 0)} 
+  25% {transform: translate(-100px, 0)} 
+  50% {transform: translate(-100px, 100px)} 
+  75% {transform: translate(0, 100px)} 
+}
+
+@keyframes item-3_move {
+  0%, 100% {transform: translate(0, 0)} 
+  25% {transform: translate(0, -100px)} 
+  50% {transform: translate(-100px, -100px)} 
+  75% {transform: translate(-100px, 0)} 
+}
+
+@keyframes item-4_move {
+  0%, 100% {transform: translate(0, 0)} 
+  25% {transform: translate(100px, 0)} 
+  50% {transform: translate(100px, -100px)} 
+  75% {transform: translate(0, -100px)} 
+}
+
+
+    </style>
+
+
+
+
+
+
+
